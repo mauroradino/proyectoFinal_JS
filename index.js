@@ -1,100 +1,86 @@
-let listaPresentes = [];
-      let listaAusentes = [];
-      let alumnos = [];
-      let totales;
-      let nombre = document.getElementById("nombre");
-      let apellido = document.getElementById("apellido");
-      let presente = document.getElementById("presente");
-      let ausente = document.getElementById("ausente");
-      let confirmar = document.getElementById("confirmar");
-      let totalAlumnos = document.getElementById("totalAlumnos");
-      let liAusentes = document.getElementById("listaAusentes");
-      let liPresentes = document.getElementById("listaPresentes");
-      let liTotal = document.getElementById("listaTotal");
-      let porcentaje = document.getElementById("porcentaje");
-      let nombres = document.getElementById("nombre");
-      nombres.classList.add("nombres");
-      let btnPresente = document.getElementById("presentismo");
-   /*    
-      ausente.addEventListener("change", () => {
-        if (ausente.checked) {
-          presente.checked = false;
-        }
-      });
+let listaPresentess = [];
+let listaAusentes = [];
+let alumnos = [];
+let confirmar = document.getElementById("confirmar");
+let liTotal = document.getElementById("listaTotal");
+let listaPresentes = document.getElementById("listaPresentes");
+let nombres = document.getElementById("nombre");
+nombres.classList.add("nombres");
 
-      presente.addEventListener("change", () => {
-        if (presente.checked) {
-          ausente.checked = false;
-        }
-      }); */
 
-      confirmar.addEventListener("click", () => {
-        let alumno = {
-          nombre: "",
-          apellido: "",
-          presentismo: "",
-        };
+for (let i = 0; i < 10; i++) {
 
-        alumno.nombre = nombre.value;
-        alumno.apellido = apellido.value;
+  fetch("https://randomuser.me/api/")
+    .then((response) => response.json())
+    .then((data) => {
 
-        if (presente.checked) {
-          alumno.presentismo = "presente";
-          listaPresentes.push(alumno);
-
-          let nuevoElemento = document.createElement("li");
-          nuevoElemento.textContent = alumno.nombre + " " + alumno.apellido;
-          liPresentes.appendChild(nuevoElemento);
-
-        } else if (ausente.checked) {
-          alumno.presentismo = "ausente";
-          listaAusentes.push(alumno);
-          
-
-          let nuevoElemento = document.createElement("li");
-          nuevoElemento.textContent = alumno.nombre + " " + alumno.apellido;
-          liAusentes.appendChild(nuevoElemento);
-          
-        } else {
-          alert("presentismo invalido");
-        }
-
-        alumnos.push(alumno);
-        nombre.value = "";
-        apellido.value = "";
-        localStorage.setItem("alumno", JSON.stringify(alumnos));
-
-       
-      });
-
-limpiar.addEventListener("click", () => {
-  localStorage.clear();
-  alumnos.splice(0, alumnos.length);
-  presente.checked = false;
-  ausente.checked = false;
-  liTotal.remove()
-  liAusentes.remove()
-  liPresentes.remove()    
-});
-
-for(let i = 0; i < 10; i++){
-  fetch('https://randomuser.me/api/')
-    .then(response => response.json())
-    .then(data => {
       const firstName = data.results[0].name.first;
       const lastName = data.results[0].name.last;
       console.log(firstName, lastName);
 
-    contenidoN = nombres.appendChild(document.createElement("li"))
-    contenidoN.textContent = firstName + " " +lastName;
-    
-    let botonesPresente = btnPresente.appendChild(document.createElement("input"))
-    botonesPresente.setAttribute("type", "checkbox");
+      const divElement = document.createElement("div");
+      let contenidoN = document.createElement("span");
+      contenidoN.textContent = firstName + " " + lastName;
+      divElement.appendChild(contenidoN);
+      contenidoN.setAttribute("id", i);
+      contenidoN.setAttribute("class", "span");
+      nombres.appendChild(divElement);
 
-    let nuevoElemento = document.createElement("li");
-    nuevoElemento.textContent = firstName + " " + lastName;
-    liTotal.appendChild(nuevoElemento);
 
+      let botonesPresente = document.createElement("input");
+      botonesPresente.setAttribute("type", "checkbox");
+      botonesPresente.setAttribute("id","7"+i);
+      botonesPresente.setAttribute("class", "checks")
+
+      divElement.appendChild(botonesPresente);
+
+      let nuevoElemento = document.createElement("li");
+      nuevoElemento.appendChild(divElement);
+      nombres.appendChild(nuevoElemento);
+
+      nuevoTotal = document.createElement("li")
+      nuevoTotal.textContent = firstName + " " + lastName;
+      liTotal.appendChild(nuevoTotal)
+      alumnos.push(nuevoTotal.textContent);
+      localStorage.setItem("Lista Total: ", JSON.stringify(alumnos))
+     
+      let btnPresente = document.querySelectorAll(".checks");
+
+btnPresente.forEach(function(checkbox) {
+  checkbox.addEventListener('change', function() {
+    if (this.checked) {
+      console.log('Checkbox con id ' + this.id + ' está seleccionado');
+     let mauro = document.getElementById(JSON.parse(this.id[1]))
+     
+     nuevoPresentes= document.createElement("li")
+     nuevoPresentes.textContent = nuevoTotal.textContent;
+     listaPresentes.appendChild(nuevoPresentes)
+     listaPresentess.push(nuevoPresentes.textContent);
+     localStorage.setItem("Lista Presentes: ", listaPresentess)
+
+
+     console.log(listaPresentess.textContent)
+     
+     nuevo = document.createElement("li")
+     nuevo.textContent = firstName + " " + lastName;
+     listaPresentes.appendChild(nuevo)
+     mauro.push(nuevo.textContent);
+     localStorage.setItem("Lista Total: ", JSON.stringify(alumnos)) 
+      // Agregar lógica aquí para agregar el alumno a la lista de presentes
+    } else {
+      console.log('Checkbox con id ' + this.id + ' no está seleccionado');
+      // Agregar lógica aquí para quitar el alumno de la lista de presentes
+    }
+  });
+});
     })
-    .catch(error => console.error(error));
+    .catch((error) => console.error(error));
 }
+
+limpiar.addEventListener("click", () => {
+  localStorage.clear();
+}); 
+
+reiniciar.addEventListener("click", () => {
+  location.reload()
+});
