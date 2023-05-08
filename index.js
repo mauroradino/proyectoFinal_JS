@@ -1,11 +1,14 @@
-let listaPresentess = [];
+let listaPresentes = [];
 let listaAusentes = [];
 let alumnos = [];
 let confirmar = document.getElementById("confirmar");
 let liTotal = document.getElementById("listaTotal");
-let listaPresentes = document.getElementById("listaPresentes");
+let liPresentes = document.getElementById("listaPresentes");
+let liAusentes = document.getElementById("listaAusentes");
 let nombres = document.getElementById("nombre");
 nombres.classList.add("nombres");
+let btnPresente = document.querySelectorAll(".checks"); 
+
 
 
 for (let i = 0; i < 10; i++) {
@@ -29,7 +32,7 @@ for (let i = 0; i < 10; i++) {
 
       let botonesPresente = document.createElement("input");
       botonesPresente.setAttribute("type", "checkbox");
-      botonesPresente.setAttribute("id","7"+i);
+      botonesPresente.setAttribute("id", "7" + i);
       botonesPresente.setAttribute("class", "checks")
 
       divElement.appendChild(botonesPresente);
@@ -43,44 +46,50 @@ for (let i = 0; i < 10; i++) {
       liTotal.appendChild(nuevoTotal)
       alumnos.push(nuevoTotal.textContent);
       localStorage.setItem("Lista Total: ", JSON.stringify(alumnos))
-     
-      let btnPresente = document.querySelectorAll(".checks");
-
-btnPresente.forEach(function(checkbox) {
-  checkbox.addEventListener('change', function() {
-    if (this.checked) {
-      console.log('Checkbox con id ' + this.id + ' está seleccionado');
-     let mauro = document.getElementById(JSON.parse(this.id[1]))
-     
-     nuevoPresentes= document.createElement("li")
-     nuevoPresentes.textContent = nuevoTotal.textContent;
-     listaPresentes.appendChild(nuevoPresentes)
-     listaPresentess.push(nuevoPresentes.textContent);
-     localStorage.setItem("Lista Presentes: ", listaPresentess)
 
 
-     console.log(listaPresentess.textContent)
-     
-     nuevo = document.createElement("li")
-     nuevo.textContent = firstName + " " + lastName;
-     listaPresentes.appendChild(nuevo)
-     mauro.push(nuevo.textContent);
-     localStorage.setItem("Lista Total: ", JSON.stringify(alumnos)) 
-      // Agregar lógica aquí para agregar el alumno a la lista de presentes
-    } else {
-      console.log('Checkbox con id ' + this.id + ' no está seleccionado');
-      // Agregar lógica aquí para quitar el alumno de la lista de presentes
-    }
-  });
-});
     })
     .catch((error) => console.error(error));
+
+   
 }
 
+confirmar.addEventListener("click", () => {
+  let btnPresente = document.querySelectorAll(".checks");
+  btnPresente.forEach(function(checkbox) {
+    if (checkbox.checked) {
+      const index = parseInt(checkbox.id.substring(1));
+      const alumno = document.getElementById(index).textContent;
+      console.log(alumno + " ESTA PRESENTE");
+      listaPresentes.push(alumno);
+      localStorage.setItem("Alumnos Presentes: ", JSON.stringify(listaPresentes));
+
+      nuevoPresente = document.createElement("li")
+      nuevoPresente.textContent = alumno;
+      liPresentes.appendChild(nuevoPresente)
+
+    } else {
+      const index = parseInt(checkbox.id.substring(1));
+      const alumno = document.getElementById(index).textContent;
+      listaAusentes.push(alumno);
+      localStorage.setItem("Alumnos Ausentes: ", JSON.stringify(listaAusentes));
+
+      nuevoAusente = document.createElement("li")
+      nuevoAusente.textContent = alumno;
+      liAusentes.appendChild(nuevoAusente)
+    }
+  });
+})
+
+console.log(alumnos)
 limpiar.addEventListener("click", () => {
   localStorage.clear();
-}); 
+});
 
 reiniciar.addEventListener("click", () => {
   location.reload()
 });
+
+
+
+
