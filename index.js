@@ -54,6 +54,16 @@ for (let i = 0; i < 10; i++) {
    
 }
 
+limpiar.addEventListener("click", () => {
+  localStorage.clear();
+  listaPresentes = [];
+  listaAusentes = [];
+  alumnos = [];
+  liTotal.innerHTML = "";
+  liPresentes.innerHTML = "";
+  liAusentes.innerHTML = "";
+});
+
 confirmar.addEventListener("click", () => {
   let btnPresente = document.querySelectorAll(".checks");
   btnPresente.forEach(function(checkbox) {
@@ -78,13 +88,11 @@ confirmar.addEventListener("click", () => {
       nuevoAusente.textContent = alumno;
       liAusentes.appendChild(nuevoAusente)
     }
+    
+   
+    
   });
 })
-
-console.log(alumnos)
-limpiar.addEventListener("click", () => {
-  localStorage.clear();
-});
 
 reiniciar.addEventListener("click", () => {
   location.reload()
