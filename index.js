@@ -13,7 +13,7 @@ let cantPresente = document.getElementById("cantPresente");
 let cantAusente = document.getElementById("cantAusente");
  
 Swal.fire('Buenos dias! \n que tenga una excelente jornada!')
-
+//hola
 for (let i = 0; i < 10; i++) {
 
   fetch("https://randomuser.me/api/")
