@@ -1,1 +1,2 @@
 # proyectoFinal_JS
+En este simulador se busca simplificar el trabajo a la hora de tomar asistencia en las escuelas, al iniciar da un mensaje de bienvenida e importa desde una API 10 nombres y apellidos y los coloca en una lista con su checkbox correspondiente. Debajo de esta lista se encuentran los botones de confirmar (segun lo seleccionado en los checkbox, una vez presionado este boton se coloca a cada alumno en la lista correspondiente), limpiar (elimina los elementos de las listas de presentes y ausentes) y reiniciar (actualiza la pagina).
