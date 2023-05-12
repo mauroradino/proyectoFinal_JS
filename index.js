@@ -7,9 +7,12 @@ let liPresentes = document.getElementById("listaPresentes");
 let liAusentes = document.getElementById("listaAusentes");
 let nombres = document.getElementById("nombre");
 nombres.classList.add("nombres");
-let btnPresente = document.querySelectorAll(".checks"); 
-
-
+let btnPresente = document.querySelectorAll(".checks");
+let cantTotal = document.getElementById("cantTotal");
+let cantPresente = document.getElementById("cantPresente");
+let cantAusente = document.getElementById("cantAusente");
+ 
+Swal.fire('Buenos dias! \n que tenga una excelente jornada!')
 
 for (let i = 0; i < 10; i++) {
 
@@ -46,12 +49,10 @@ for (let i = 0; i < 10; i++) {
       liTotal.appendChild(nuevoTotal)
       alumnos.push(nuevoTotal.textContent);
       localStorage.setItem("Lista Total: ", JSON.stringify(alumnos))
-
-
+      cantTotal.innerText = alumnos.length;
     })
     .catch((error) => console.error(error));
-
-   
+  
 }
 
 limpiar.addEventListener("click", () => {
@@ -59,44 +60,104 @@ limpiar.addEventListener("click", () => {
   listaPresentes = [];
   listaAusentes = [];
   alumnos = [];
-  liTotal.innerHTML = "";
   liPresentes.innerHTML = "";
   liAusentes.innerHTML = "";
+  cantAusente.innerText = 0;
+  cantPresente.innerText = 0;
 });
 
 confirmar.addEventListener("click", () => {
   let btnPresente = document.querySelectorAll(".checks");
   btnPresente.forEach(function(checkbox) {
-    if (checkbox.checked) {
-      const index = parseInt(checkbox.id.substring(1));
-      const alumno = document.getElementById(index).textContent;
-      console.log(alumno + " ESTA PRESENTE");
-      listaPresentes.push(alumno);
-      localStorage.setItem("Alumnos Presentes: ", JSON.stringify(listaPresentes));
-
-      nuevoPresente = document.createElement("li")
-      nuevoPresente.textContent = alumno;
-      liPresentes.appendChild(nuevoPresente)
-
+    const index = parseInt(checkbox.id.substring(1));
+    const alumno = document.getElementById(index).textContent;
+    const estaSeleccionado = checkbox.checked;
+    if (estaSeleccionado) {
+      if (!listaPresentes.includes(alumno)) {
+        console.log(alumno + " ESTA PRESENTE");
+        listaPresentes.push(alumno);
+        // Si el alumno estaba antes en la lista de ausentes, lo eliminamos
+        const index = listaAusentes.indexOf(alumno);
+        if (index >= 0) {
+          listaAusentes.splice(index, 1);
+        }
+      }
     } else {
-      const index = parseInt(checkbox.id.substring(1));
-      const alumno = document.getElementById(index).textContent;
-      listaAusentes.push(alumno);
-      localStorage.setItem("Alumnos Ausentes: ", JSON.stringify(listaAusentes));
-
-      nuevoAusente = document.createElement("li")
-      nuevoAusente.textContent = alumno;
-      liAusentes.appendChild(nuevoAusente)
+      if (!listaAusentes.includes(alumno)) {
+        listaAusentes.push(alumno);
+        // Si el alumno estaba antes en la lista de presentes, lo eliminamos
+        const index = listaPresentes.indexOf(alumno);
+        if (index >= 0) {
+          listaPresentes.splice(index, 1);
+        }
+      }
     }
-    
-   
-    
   });
-})
+  // Actualizamos las listas y los contadores
+  localStorage.setItem("Alumnos Presentes: ", JSON.stringify(listaPresentes));
+  localStorage.setItem("Alumnos Ausentes: ", JSON.stringify(listaAusentes));
+  liPresentes.innerHTML = "";
+  listaPresentes.forEach(function(alumno) {
+    nuevoPresente = document.createElement("li");
+    nuevoPresente.textContent = alumno;
+    liPresentes.appendChild(nuevoPresente);
+  });
+  cantPresente.innerText = listaPresentes.length;
+  liAusentes.innerHTML = "";
+  listaAusentes.forEach(function(alumno) {
+    nuevoAusente = document.createElement("li");
+    nuevoAusente.textContent = alumno;
+    liAusentes.appendChild(nuevoAusente);
+  });
+  cantAusente.innerText = listaAusentes.length;
+});
 
 reiniciar.addEventListener("click", () => {
-  location.reload()
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-success',
+      cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+  })
+  
+  swalWithBootstrapButtons.fire({
+    title: 'Estas seguro?',
+    text: "La lista de nombres se va a reiniciar",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Si, reiniciar ',
+    cancelButtonText: 'No, cancelar! ',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      swalWithBootstrapButtons.fire(
+        location.reload(),
+        'Reiniciado.'
+      )
+    } else if (
+      /* Read more about handling dismissals below */
+      result.dismiss === Swal.DismissReason.cancel
+    ) {
+      swalWithBootstrapButtons.fire(
+        'Reinicio Cancelado'
+      )
+    }
+  })
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
