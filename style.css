@@ -5,12 +5,14 @@ h1{
     text-align: center;
     color: white;
     font-family: 'Sigmar', cursive;
+    text-shadow: 2px 2px black;
     margin-top: 40px;
     margin-bottom: 80px;
 }
 body{
- /* background-color: rgb(10, 10, 40);  */
- background-color: black;
+    background-image: url(./imagenes/Cloudy.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
  .primer_grupo{
     display: flex;
@@ -37,7 +39,7 @@ label{
     margin-right: 2%;
     font-family: 'Sigmar';
     font-size: 14px;
-    color: white;
+    color: black;
     font-weight: lighter ;
 }
 .checkbox{
@@ -53,17 +55,31 @@ label{
     justify-content: space-around;
 }
 .total li{
-    color: white;
+    color: black;
     list-style-type: none;
 }
 .nombres{
-    color: white;
+    color: black;
     list-style-type: none;
+}
+#nombre li div{
+    display: flex;
+    justify-content: space-between;
 }
 .nombresApellidos{
     display: flex;
 }
 .listaCheck{
     display: grid;
-    color: white;
+    color: black;
+}
+.checks{
+    margin-left: 20px;
+}
+.cantidades{
+    color: black;
+    margin-left: 20px;
+}
+.btn-danger{
+    margin-right: 10px;
 }
