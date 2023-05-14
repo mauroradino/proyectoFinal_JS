@@ -1,6 +1,7 @@
 let listaPresentes = [];
 let listaAusentes = [];
 let alumnos = [];
+let limpiar = document.getElementById("limpiar");
 let confirmar = document.getElementById("confirmar");
 let liTotal = document.getElementById("listaTotal");
 let liPresentes = document.getElementById("listaPresentes");
@@ -11,9 +12,10 @@ let btnPresente = document.querySelectorAll(".checks");
 let cantTotal = document.getElementById("cantTotal");
 let cantPresente = document.getElementById("cantPresente");
 let cantAusente = document.getElementById("cantAusente");
- 
+
 Swal.fire('Buenos dias! \n que tenga una excelente jornada!')
-//hola
+localStorage.clear();
+
 for (let i = 0; i < 10; i++) {
 
   fetch("https://randomuser.me/api/")
@@ -43,7 +45,6 @@ for (let i = 0; i < 10; i++) {
       let nuevoElemento = document.createElement("li");
       nuevoElemento.appendChild(divElement);
       nombres.appendChild(nuevoElemento);
-
       nuevoTotal = document.createElement("li")
       nuevoTotal.textContent = firstName + " " + lastName;
       liTotal.appendChild(nuevoTotal)
@@ -52,7 +53,7 @@ for (let i = 0; i < 10; i++) {
       cantTotal.innerText = alumnos.length;
     })
     .catch((error) => console.error(error));
-  
+
 }
 
 limpiar.addEventListener("click", () => {
@@ -68,15 +69,13 @@ limpiar.addEventListener("click", () => {
 
 confirmar.addEventListener("click", () => {
   let btnPresente = document.querySelectorAll(".checks");
-  btnPresente.forEach(function(checkbox) {
+  btnPresente.forEach(function (checkbox) {
     const index = parseInt(checkbox.id.substring(1));
     const alumno = document.getElementById(index).textContent;
     const estaSeleccionado = checkbox.checked;
     if (estaSeleccionado) {
       if (!listaPresentes.includes(alumno)) {
-        console.log(alumno + " ESTA PRESENTE");
         listaPresentes.push(alumno);
-        // Si el alumno estaba antes en la lista de ausentes, lo eliminamos
         const index = listaAusentes.indexOf(alumno);
         if (index >= 0) {
           listaAusentes.splice(index, 1);
@@ -85,31 +84,45 @@ confirmar.addEventListener("click", () => {
     } else {
       if (!listaAusentes.includes(alumno)) {
         listaAusentes.push(alumno);
-        // Si el alumno estaba antes en la lista de presentes, lo eliminamos
-        const index = listaPresentes.indexOf(alumno);
+        const index = listaPresentes.indexOf(alumno); 
         if (index >= 0) {
-          listaPresentes.splice(index, 1);
+          listaPresentes.splice(index, 1);             // Si el alumno estaba antes en la lista de presentes, lo eliminamos
         }
       }
     }
   });
-  // Actualizamos las listas y los contadores
+  
   localStorage.setItem("Alumnos Presentes: ", JSON.stringify(listaPresentes));
-  localStorage.setItem("Alumnos Ausentes: ", JSON.stringify(listaAusentes));
+  localStorage.setItem("Alumnos Ausentes: ", JSON.stringify(listaAusentes));       // Actualizamos las listas y los contadores
   liPresentes.innerHTML = "";
-  listaPresentes.forEach(function(alumno) {
-    nuevoPresente = document.createElement("li");
-    nuevoPresente.textContent = alumno;
-    liPresentes.appendChild(nuevoPresente);
-  });
   cantPresente.innerText = listaPresentes.length;
   liAusentes.innerHTML = "";
-  listaAusentes.forEach(function(alumno) {
-    nuevoAusente = document.createElement("li");
-    nuevoAusente.textContent = alumno;
-    liAusentes.appendChild(nuevoAusente);
-  });
   cantAusente.innerText = listaAusentes.length;
+
+  let presentes = JSON.parse(localStorage.getItem("Alumnos Presentes: "));       // Recuperamos los nombres de los alumnos presentes desde localStorage
+  presentes.forEach(function (elementos) {                    // Recorrer elementos seleccionados y agregarlos a la lista
+    if (listaPresentes.includes(elementos)) {
+      console.log(elementos + " ESTA PRESENTE");
+      let nuevaprueba = document.createElement("li");
+      nuevaprueba.setAttribute("class", "span");
+      nuevaprueba.textContent = JSON.stringify(elementos).replace('"', ' ');
+      liPresentes.appendChild(nuevaprueba);
+    }
+  });
+
+  // Recuperamos los nombres de los alumnos ausentes desde localStorage
+  let Ausentes = JSON.parse(localStorage.getItem("Alumnos Ausentes: "));
+  liAusentes.innerHTML = '';
+  // Recorrer elementos seleccionados y agregarlos a la lista
+  Ausentes.forEach(function (elemento) {
+    if (listaAusentes.includes(elemento)) {
+      console.log(elemento + " ESTA PRESENTE");
+      let nuevaprueba = document.createElement("li");
+      nuevaprueba.setAttribute("class", "span");
+      nuevaprueba.textContent = JSON.stringify(elemento).replace('"', '');
+      liAusentes.appendChild(nuevaprueba);
+    }
+  });
 });
 
 reiniciar.addEventListener("click", () => {
@@ -120,7 +133,7 @@ reiniciar.addEventListener("click", () => {
     },
     buttonsStyling: false
   })
-  
+
   swalWithBootstrapButtons.fire({
     title: 'Estas seguro?',
     text: "La lista de nombres se va a reiniciar",
@@ -144,9 +157,7 @@ reiniciar.addEventListener("click", () => {
       )
     }
   })
-
 });
-
 
 
 
