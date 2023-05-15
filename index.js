@@ -13,6 +13,8 @@ let cantTotal = document.getElementById("cantTotal");
 let cantPresente = document.getElementById("cantPresente");
 let cantAusente = document.getElementById("cantAusente");
 
+
+
 Swal.fire('Buenos dias! \n que tenga una excelente jornada!')
 localStorage.clear();
 
@@ -24,8 +26,6 @@ for (let i = 0; i < 10; i++) {
 
       const firstName = data.results[0].name.first;
       const lastName = data.results[0].name.last;
-      console.log(firstName, lastName);
-
       const divElement = document.createElement("div");
       let contenidoN = document.createElement("span");
       contenidoN.textContent = firstName + " " + lastName;
@@ -78,7 +78,7 @@ confirmar.addEventListener("click", () => {
         listaPresentes.push(alumno);
         const index = listaAusentes.indexOf(alumno);
         if (index >= 0) {
-          listaAusentes.splice(index, 1);
+          listaAusentes.splice(index, 1);               // Si el alumno estaba antes en la lista de ausentes, lo eliminamos
         }
       }
     } else {
@@ -99,27 +99,24 @@ confirmar.addEventListener("click", () => {
   liAusentes.innerHTML = "";
   cantAusente.innerText = listaAusentes.length;
 
-  let presentes = JSON.parse(localStorage.getItem("Alumnos Presentes: "));       // Recuperamos los nombres de los alumnos presentes desde localStorage
-  presentes.forEach(function (elementos) {                    // Recorrer elementos seleccionados y agregarlos a la lista
+  let presentes = JSON.parse(localStorage.getItem("Alumnos Presentes: "));       // Leemos los nombres de los alumnos presentes desde localStorage
+  
+  presentes.forEach(function (elementos) {                    // Recorremos elementos seleccionados y los agregamos a la lista
     if (listaPresentes.includes(elementos)) {
-      console.log(elementos + " ESTA PRESENTE");
       let nuevaprueba = document.createElement("li");
       nuevaprueba.setAttribute("class", "span");
-      nuevaprueba.textContent = JSON.stringify(elementos).replace('"', ' ');
+      nuevaprueba.textContent = JSON.stringify(elementos).replace(/"/g, '');
       liPresentes.appendChild(nuevaprueba);
     }
   });
-
-  // Recuperamos los nombres de los alumnos ausentes desde localStorage
-  let Ausentes = JSON.parse(localStorage.getItem("Alumnos Ausentes: "));
+  
+  let Ausentes = JSON.parse(localStorage.getItem("Alumnos Ausentes: "));     // Leemos los nombres de los alumnos ausentes desde localStorage
   liAusentes.innerHTML = '';
-  // Recorrer elementos seleccionados y agregarlos a la lista
-  Ausentes.forEach(function (elemento) {
+  Ausentes.forEach(function (elemento) {         // Recorremos los elementos seleccionados y los agregamos a la lista
     if (listaAusentes.includes(elemento)) {
-      console.log(elemento + " ESTA PRESENTE");
       let nuevaprueba = document.createElement("li");
       nuevaprueba.setAttribute("class", "span");
-      nuevaprueba.textContent = JSON.stringify(elemento).replace('"', '');
+      nuevaprueba.textContent = JSON.stringify(elemento).replace(/"/g, '');
       liAusentes.appendChild(nuevaprueba);
     }
   });
@@ -144,12 +141,15 @@ reiniciar.addEventListener("click", () => {
     reverseButtons: true
   }).then((result) => {
     if (result.isConfirmed) {
+      
       swalWithBootstrapButtons.fire(
-        location.reload(),
+        setTimeout(() => {
+          location.reload()
+        }, 1000),
+      
         'Reiniciado.'
       )
-    } else if (
-      /* Read more about handling dismissals below */
+    }  else if (
       result.dismiss === Swal.DismissReason.cancel
     ) {
       swalWithBootstrapButtons.fire(
@@ -158,6 +158,12 @@ reiniciar.addEventListener("click", () => {
     }
   })
 });
+
+
+
+
+
+
 
 
 
